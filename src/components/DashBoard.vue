@@ -76,33 +76,13 @@ export default {
         RemoveBg(file) {
             const formData = new FormData();
             formData.append('size', 'auto');
-
-            //formData.append('previewImage', photo)
             formData.append('image_file', file, file.name)
-
-            // axios.post('https://api.remove.bg/v1.0/removebg',
-            //         formData, {
-            //             headers: {
-            //                 'Content-Type': 'multipart/form-data',
-            //                 'X-Api-Key': 'eT4vfE8dvxRMuquT7EEAiNb4'
-            //             }
-            //         }
-            //     ).then(function (response) {
-            //         this.bgImage = fs.readFileSync(response.data)
-            //         this.bgImage = response.data;
-            //         // this.bgImage = response.data;
-            //         console.log('SUCCESS!!');
-            //     })
-            //     .catch(function () {
-            //         console.log('FAILURE!!');
-            //     });
             axios({
                     method: 'post',
                     url: 'https://api.remove.bg/v1.0/removebg',
                     data: formData,
                     responseType: 'arraybuffer',
                     headers: {
-                        // ...formData.getHeaders(),
                         'X-Api-Key': 'eT4vfE8dvxRMuquT7EEAiNb4',
                         'Content-Type': 'multipart/form-data'
 
@@ -110,12 +90,12 @@ export default {
                 })
                 .then((response) => {
                     if (response.status != 200) return console.error('Error:', response.status, response.statusText);
-                    // fs.writeFileSync("no-bg.png", response.data);
+                  
                     var base64 = btoa(
                         new Uint8Array(response.data)
                         .reduce((data, byte) => data + String.fromCharCode(byte), '')
                     );
-                    // var base64String = btoa(String.fromCharCode.apply(null, new Uint8Array(response.data)));
+            
                     this.bgImage = base64;
                 })
                 .catch((error) => {
@@ -136,33 +116,11 @@ export default {
             }
         },
         downloadImage(bgImage) {
-            // const image = `data:image/png;base64,${bgImage}`;
-            // const imageBlog = image.blob()
-            // const imageURL = URL.createObjectURL(imageBlog)
-
-            // const link = document.createElement('a')
-            // link.href = imageURL
-            // link.download = 'test.png'
-            // document.body.appendChild(link)
-            // link.click()
-            // document.body.removeChild(link)
             const linkSource = `data:image/png;base64,${bgImage}`;
             const downloadLink = document.createElement("a");
             downloadLink.href = linkSource;
             downloadLink.download = 'test.png';
             downloadLink.click();
-            // var FILE = window.URL.createObjectURL(bgImage);
-
-            //     var docUrl = document.createElement('x');
-            //     docUrl.href = FILE;
-            //     docUrl.setAttribute('download', 'file.pdf');
-            //     document.body.appendChild(docUrl);
-            //     docUrl.click();
-
-            // var a = document.createElement('a'); //Create <a>
-            // a.href = "data:image/png;base64," + bgImage;//Image Base64 Goes here
-            // a.download = "Image.png"; //File name Here
-            // a.click(); //Downloaded file
         }
     }
 }
